@@ -68,9 +68,38 @@
     ul li {
         margin-bottom: 10px;
     }
+    .topnav {
+      border-radius: 15px;
+      background-color: #0056b3;
+      overflow: hidden;
+    }
+
+    .topnav a {
+      float: left;
+      background-color: #003064;
+      color : white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    .topnav a:hover {
+      background-color: #2104a2;
+      color:  white;
+    }
+
+    .topnav a.active {
+      background-color : black;
+      color: white;
+    }
   </style>
 </head>
 <body>
+  <div class="topnav">
+    <a id="accountName" href="javascript:void(0)">Guest</a>
+    <a href="">Credits</a>
+  </div>
   <h1>User Management</h1>
   <div class="container">
     <h2>Create User</h2>
@@ -98,6 +127,7 @@
   </div>
   <script>
     const apiUrl = 'http://localhost:3000';
+    var isLogin = false;
 
     const showMessage = (message, isError = false) => {
         const messageDiv = document.getElementById('message');
@@ -171,8 +201,22 @@
         });
 
         if (response.ok) {
-          showMessage('Login successful!');
-        } else {
+          const contentType = response.headers.get('Content-Type');
+          let message;
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            message = data.message || 'Login successful!';
+          } else {
+            message = await response.text();
+          }
+        
+          showMessage(message);
+          isLogin = true;
+        
+          // Update account name
+          document.getElementById("accountName").textContent = Name;
+        }
+        else {
           const error = await response.text();
           showMessage(`Login failed: ${error}`, true);
         }
