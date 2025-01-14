@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta Name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+    h1 {
+        text-align: center;
+    }
+    .container{
+        max-width: 500px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .form-group input{
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+        background: #0056b3;
+    }
+    button:active{
+        background: #2104a2;
+    }
+
+    .message {
+        margin-top: 20px;
+        padding: 10px;
+        background: #e1f5e1;
+        border: 1px solid #2e7d32;
+        border-radius: 4px;
+    }
+    .error {
+        background: #fdecea;
+        color: #c62828;
+        border : 1px solid #c62828;
+    }
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+    ul li {
+        margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Management</h1>
+  <div class="container">
+    <h2>Create User</h2>
+    <div class="form-group">
+        <label for="createName">Name:</label>
+        <input type="text" id="createName" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+        <label for="createPassword">Password:</label>
+        <input type="Password" id="createPassword" placeholder="Enter Password">
+    </div>
+    <button onclick="createUser()" id="createButton">Create User</button>
+
+    <h2>Login</h2>
+    <div class="form-group">
+        <label for="loginName">Name:</label>
+        <input type="text" id="loginName" placeholder="Enter username">
+    </div>
+    <div class="form-group">
+        <label for="loginPassword">Password:</label>
+        <input type="Password" id="loginPassword" placeholder="Enter Password">
+    </div>
+    <button onclick="login()" id="loginButton">Login</button>
+    <div id="message" style="display: none;"></div>
+  </div>
+  <script>
+    const apiUrl = 'http://localhost:3000';
+
+    const showMessage = (message, isError = false) => {
+        const messageDiv = document.getElementById('message');
+        if (!messageDiv) {
+          console.error('Message element not found');
+          return;
+        }
+        messageDiv.style.display = 'block';
+        messageDiv.textContent = message;
+        messageDiv.className = isError ? 'message error' : 'message';
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 3000);
+    };
+
+    const createUser = async () => {
+        const Name = document.getElementById('createName').value.trim();
+        const Password = document.getElementById('createPassword').value;
+
+        if (!Name || !Password) {
+          console.error('Name and Password are required.');
+          showMessage('Name and Password are required.', true);
+          return;
+        }
+    
+        // Disable the button to prevent double-clicking
+        const createButton = document.querySelector('button');
+        createButton.disabled = true;
+        createButton.textContent = 'Creating...';
+    
+        try {
+          const response = await fetch('http://localhost:3000/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Name, Password }),
+          });
+      
+          if (response.ok) {
+            showMessage('User created successfully!');
+            console.log('User created successfully!');
+          } else {
+            const error = await response.text();
+            console.error('Error:', error);
+            showMessage(error, true); // Show error message
+          }
+        } catch (err) {
+          console.error('Error sending request:', err);
+          showMessage('Error sending request', true); // Show error message
+        } finally {
+          // Re-enable the button after the request is complete
+          createButton.disabled = false;
+          createButton.textContent = 'Create User';
+        }
+    };
+
+    
+    const login = async () => {
+      const Name = document.getElementById('loginName').value.trim();
+      const Password = document.getElementById('loginPassword').value;
+
+      if (!Name || !Password) {
+        showMessage('Name and Password are required for login.', true);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/users/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Name, Password }),
+        });
+
+        if (response.ok) {
+          showMessage('Login successful!');
+        } else {
+          const error = await response.text();
+          showMessage(`Login failed: ${error}`, true);
+        }
+      } catch (err) {
+        showMessage('Error sending login request. Check the console for details.', true);
+        console.error('Error during login:', err);
+      }
+    };
+
+  </script>
+</body>
+</html>
