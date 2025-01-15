@@ -83,9 +83,8 @@ app.post('/users/login', async (req, res) => {
         }
 
         try {
-            // Compare the hashed password with the stored password
             if (await bcrypt.compare(Password, row.Password)) {
-                res.status(202).send('Success');
+                res.status(202).json({ message: 'Login successful', level: row.Level });
             } else {
                 res.status(203).send('Wrong password');
             }
@@ -95,6 +94,7 @@ app.post('/users/login', async (req, res) => {
         }
     });
 });
+
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

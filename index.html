@@ -99,6 +99,7 @@
   <div class="topnav">
     <a id="accountName" href="javascript:void(0)">Guest</a>
     <a href="">Credits</a>
+    <a id="begin" href="">Begin</a>
   </div>
   <h1>User Management</h1>
   <div class="container">
@@ -203,9 +204,11 @@
         if (response.ok) {
           const contentType = response.headers.get('Content-Type');
           let message;
-          if (contentType && contentType.includes('application/json')) {
-            const data = await response.json();
-            message = data.message || 'Login successful!';
+          let level = null;
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                message = data.message || 'Login successful!';
+                level = data.level; 
           } else {
             message = await response.text();
           }
@@ -213,7 +216,7 @@
           showMessage(message);
           isLogin = true;
         
-          // Update account name
+          document.getElementById("begin").href = "";
           document.getElementById("accountName").textContent = Name;
         }
         else {
@@ -225,6 +228,40 @@
         console.error('Error during login:', err);
       }
     };
+
+    function check(level){
+        var urlLvl = '';
+        switch (level) {
+          case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
+          case 5:
+            break;
+          case 6:
+            break;
+          case 7:
+            break;
+          case 8:
+            break;
+          case 9:
+            break;
+          case 10:
+            break;
+          case 11:
+            break;
+          case 12:
+            break;
+        }
+
+        return urlLvl;
+    }
 
   </script>
 </body>
