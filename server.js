@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose(); 
+const fs = require('fs');
 
 const app = express();
 app.use(express.json());
@@ -84,6 +85,25 @@ app.post('/users/login', async (req, res) => {
 
         try {
             if (await bcrypt.compare(Password, row.Password)) {
+                // Save the current user's information to a JSON file
+                const userData = {
+                    users: [
+                        {
+                            Name: row.Name,
+                            Level: row.Level,
+                        },
+                    ],
+                };
+
+                const filePath = 'currentUser.json';
+                try {
+                    fs.writeFileSync(filePath, JSON.stringify(userData, null, 2), 'utf-8');
+                    console.log('Current user saved to JSON file.');
+                } catch (fileErr) {
+                    console.error('Error writing to JSON file:', fileErr);
+                    return res.status(500).send('Error saving user data');
+                }
+
                 res.status(202).json({ message: 'Login successful', level: row.Level });
             } else {
                 res.status(203).send('Wrong password');

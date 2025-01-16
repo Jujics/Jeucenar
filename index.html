@@ -93,13 +93,42 @@
       background-color : black;
       color: white;
     }
+
+    .footer {
+      position:absolute;
+      width: 100%;
+      bottom:0;
+      background-color: #0056b3;
+      overflow: hidden;
+    }
+
+    .footer a{
+      float: left;
+      background-color: #003064;
+      color : white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    .footer a:hover {
+      background-color: #2104a2;
+      color:  white;
+    }
+
+    .footer a.active {
+      background-color : black;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <div class="topnav">
     <a id="accountName" href="javascript:void(0)">Guest</a>
     <a href="">Credits</a>
-    <a id="begin" href="">Begin</a>
+    <a id="begin" href="1.html">Begin</a>
+    <a id="continue" href="">Continue</a>
   </div>
   <h1>User Management</h1>
   <div class="container">
@@ -126,9 +155,13 @@
     <button onclick="login()" id="loginButton">Login</button>
     <div id="message" style="display: none;"></div>
   </div>
+  <div class="footer">
+    <a href="">Credits</a>
+    <a id="begin" href="">Begin</a>
   <script>
     const apiUrl = 'http://localhost:3000';
     var isLogin = false;
+    
 
     const showMessage = (message, isError = false) => {
         const messageDiv = document.getElementById('message');
@@ -216,7 +249,7 @@
           showMessage(message);
           isLogin = true;
         
-          document.getElementById("begin").href = "";
+          document.getElementById("continue").href = check(level);
           document.getElementById("accountName").textContent = Name;
         }
         else {
@@ -233,43 +266,43 @@
         var urlLvl = '';
         switch (level) {
           case 0:
-            urlLvl = '';
+            urlLvl = '0.html';
             break;
           case 1:
-            urlLvl = '';
+            urlLvl = '1.html';
             break;
           case 2:
-            urlLvl = '';
+            urlLvl = '2.html';
             break;
           case 3:
-            urlLvl = '';
+            urlLvl = '3.html';
             break;
           case 4:
-            urlLvl = '';
+            urlLvl = '4.html';
             break;
           case 5:
-            urlLvl = '';
+            urlLvl = '5.html';
             break;
           case 6:
-            urlLvl = '';
+            urlLvl = '6.html';
             break;
           case 7:
-            urlLvl = '';
+            urlLvl = '7.html';
             break;
           case 8:
-            urlLvl = '';
+            urlLvl = '8.html';
             break;
           case 9:
-            urlLvl = '';
+            urlLvl = '9.html';
             break;
           case 10:
-            urlLvl = '';
+            urlLvl = '10.html';
             break;
           case 11:
-            urlLvl = '';
+            urlLvl = '11.html';
             break;
           case 12:
-          urlLvl = '';
+            urlLvl = '12.html';
             break;
         }
 
