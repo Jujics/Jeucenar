@@ -1,8 +1,8 @@
-GET https://jeucenar.onrender.com/users
+GET http://localhost:3000/users
 
 ###
 
-POST https://jeucenar.onrender.com/users
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ###
 
-POST https://jeucenar.onrender.com/users/login
+POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
