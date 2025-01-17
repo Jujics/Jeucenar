@@ -3,6 +3,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose(); 
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
