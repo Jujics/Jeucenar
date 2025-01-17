@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ecran 1</title>
+        <title>Ecran 6</title>
         <script type="text/javascript">
             var name;
             var level;
@@ -22,7 +22,7 @@
                     if (data.users && data.users.length > 0) {
                         const user = data.users[0];  // Assuming there's only one user in the response
                         const name = user.Name;
-                        const level = 1;
+                        const level = 6;
                     
                         // Validate data
                         if (!name || typeof level !== 'number' || level < 1) {
@@ -176,9 +176,8 @@
         </center>
         <div class="overlay" id="overlay" style="display: none;">
             <div class="overlay-content">
-                <p>Question</p>
-                <button class="button-89" role="button" onclick="window.location.href='0.html'">Choix A</button>
-                <button class="button-89" role="button" onclick="window.location.href='0.html'">Choix B</button>
+                <p>Game over</p>
+                <button class="button-89" role="button" onclick="window.location.href='1.html'">Retour au debut</button>
             </div>
         </div>
         <script>
