@@ -115,6 +115,47 @@ app.post('/users/login', async (req, res) => {
     });
 });
 
+app.get('/current-user', (req, res) => {
+    const filePath = 'currentUser.json';
+
+    try {
+        if (fs.existsSync(filePath)) {
+            const data = fs.readFileSync(filePath, 'utf-8');
+            res.status(200).json(JSON.parse(data));
+        } else {
+            res.status(404).json({ message: 'No current user data found.' });
+        }
+    } catch (err) {
+        console.error('Error reading current user data:', err);
+        res.status(500).json({ message: 'Error reading current user data.' });
+    }
+});
+
+app.post('/change-lvl', (req, res) => {
+    const { Name, Level } = req.body;
+
+    // Validate inputs
+    if (!Name || typeof Level !== 'number' || Level < 1) {
+        return res.status(400).send('Invalid data. Name and a valid level are required.');
+    }
+
+    // Update the user's level in the database
+    db.run('UPDATE UsersInfo SET Level = ? WHERE Name = ?', [Level, Name], function (err) {
+        if (err) {
+            console.error('Error updating user level:', err);
+            return res.status(500).send('Error updating user level');
+        }
+
+        // Check if any rows were affected
+        if (this.changes === 0) {
+            return res.status(404).send('User not found');
+        }
+
+        res.status(200).send(`Level for user ${Name} updated to ${Level}`);
+    });
+});
+
+
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

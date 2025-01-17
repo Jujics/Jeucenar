@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ecran 1</title>
+        <script type="text/javascript">
+            var name;
+            var level;
+            window.onload = async function() {
+                try {
+                    // Fetch JSON data from the server
+                    const response = await fetch('http://localhost:3000/current-user');
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+
+                    const data = await response.json();
+                
+                    // Check if there is any user data
+                    if (data.users && data.users.length > 0) {
+                        const user = data.users[0];  // Assuming there's only one user in the response
+                        const name = user.Name;
+                        const level = 1;
+                    
+                        // Validate data
+                        if (!name || typeof level !== 'number' || level < 1) {
+                            console.error('Invalid data. Name and a valid level are required.');
+                            return;
+                        }
+                    
+                        // Send POST request to change the level
+                        const changeResponse = await fetch('http://localhost:3000/change-lvl', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                Name: name,
+                                Level: level,
+                            }),
+                        });
+                    
+                        if (changeResponse.ok) {
+                            const message = await changeResponse.text();
+                            console.log(message);  // Success message (level updated)
+                        } else {
+                            const error = await changeResponse.text();
+                            console.error('Error:', error);  // Error message
+                        }
+                    } else {
+                        console.error('No user data found');
+                    }
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                }
+            }
+
+        </script>
+        <style>
+            .topnav {
+              border-radius: 15px;
+              background-color: #0056b3;
+              overflow: hidden;
+            }
+        
+            .topnav a {
+              float: left;
+              background-color: #003064;
+              color : white;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none;
+              font-size: 17px;
+            }
+        
+            .topnav a:hover {
+              background-color: #2104a2;
+              color:  white;
+            }
+        
+            .topnav a.active {
+              background-color : black;
+              color: white;
+            }
+            html, body{
+              min-height: 100%;
+            }
+            body{
+              position: relative;
+            }
+            .overlay{
+                position: fixed; 
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%; 
+                z-index: 10;
+                background-color: rgba(0, 0, 0, 0.5); 
+                display: flex;
+                align-items: center; 
+                justify-content: center; 
+                color: white;
+                font-size: 24px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="topnav">
+            <a  href="index.html">Menu</a>
+        </div>
+        <center>
+        <br>
+        <br>
+        <video width="80%" height="80%" id="main" controls autoplay>
+            <source src="Julie_MercuryAnglais.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        </center>
+        <div class="overlay" id =  "overlay" style="display: none;">
+            <p>irueythiu</p>
+        </div>
+        <script>
+            document.getElementById('main').addEventListener('ended',myHandler,false);
+            function myHandler(e) {
+                document.getElementById("overlay").style.display = "block";
+            }
+            
+        </script>
+    </body>
+</html>
