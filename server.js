@@ -29,6 +29,10 @@ db.serialize(() => {
     `);
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // GET all users (for testing purposes)
 app.get('/users', (req, res) => {
     db.all('SELECT * FROM UsersInfo', [], (err, rows) => {
